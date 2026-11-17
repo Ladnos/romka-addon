@@ -1,0 +1,10 @@
+## Interface: 16001
+## Title: Warrior Guide |cffc79c6e(Journal Edition)|r
+## Notes: Visual Warrior leveling, talent trees, routes and dungeon loot guide in Dungeon Journal style.
+## Author: Romyl
+## Version: 2.0.1
+## SavedVariables: WarriorGuideDB
+
+Locales.lua
+Data.lua
+Core.lua
