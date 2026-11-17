@@ -641,17 +641,17 @@ local function BuildBuildsPage(page)
     local leftPanel = CreateJournalCard(page, leftW, CONTENT_H)
     leftPanel:SetPoint("TOPLEFT", page, "TOPLEFT", 0, 0)
 
-    local ly = -10
+    local ly = -8
     for idx, build in ipairs(WG.Data.Builds) do
-        local btn = CreateListButton(leftPanel, leftW - 16, 56, selected == idx)
+        local btn = CreateListButton(leftPanel, leftW - 16, 46, selected == idx)
         btn:SetPoint("TOPLEFT", leftPanel, "TOPLEFT", 8, ly)
 
-        local bIcon = AddIcon(btn, build.icon, 32)
-        bIcon:SetPoint("LEFT", btn, "LEFT", 8, 0)
+        local bIcon = AddIcon(btn, build.icon, 28)
+        bIcon:SetPoint("LEFT", btn, "LEFT", 7, 0)
 
-        local bTitle = btn:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-        bTitle:SetPoint("LEFT", bIcon, "RIGHT", 8, 0)
-        bTitle:SetWidth(leftW - 16 - 60)
+        local bTitle = btn:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+        bTitle:SetPoint("LEFT", bIcon, "RIGHT", 7, 0)
+        bTitle:SetWidth(leftW - 16 - 52)
         bTitle:SetJustifyH("LEFT")
         bTitle:SetText(L(build.titleKey))
 
@@ -659,19 +659,26 @@ local function BuildBuildsPage(page)
             WarriorGuideDB.selectedBuild = idx
             RenderCurrentTab()
         end)
-        ly = ly - 62
+        ly = ly - 50
     end
 
-    -- Легенда тегов
-    ly = ly - 6
+    -- Легенда тегов: 2 x 2 плашки, пояснение — во всплывающей подсказке
+    ly = ly - 4
     AddDivider(leftPanel, 12, ly, leftW - 24)
     ly = ly - 10
-    for _, tagId in ipairs({ "key", "pause", "return", "filler" }) do
+    for i, tagId in ipairs({ "key", "pause", "return", "filler" }) do
         local badge = AddTagBadge(leftPanel, tagId)
-        badge:SetPoint("TOPLEFT", leftPanel, "TOPLEFT", 12, ly)
-        local _, h = AddText(leftPanel, "GameFontHighlightSmall", GRAY .. L(TAGS[tagId].tip) .. "|r", leftW - 24, 12, ly - 18)
-        ly = ly - 18 - h - 8
+        local col = (i - 1) % 2
+        local rowY = ly - math.floor((i - 1) / 2) * 20
+        badge:SetPoint("TOPLEFT", leftPanel, "TOPLEFT", 12 + col * 96, rowY)
+        AttachTooltip(badge, function(tt)
+            local tag = TAGS[tagId]
+            tt:AddLine(L(tag.key), tag.r, tag.g, tag.b)
+            tt:AddLine(L(tag.tip), 1, 1, 1, true)
+        end)
     end
+    ly = ly - 44
+    AddText(leftPanel, "GameFontDisableSmall", L("TREE_RULES"), leftW - 24, 12, ly)
 
     -- Правая колонка: шапка билда + прокручиваемый список
     local rightPanel = CreateJournalCard(page, rightW, CONTENT_H)
@@ -682,7 +689,11 @@ local function BuildBuildsPage(page)
 
     local y = -34
     local _, h = AddText(rightPanel, "GameFontHighlightSmall", LIGHT .. L(activeBuild.subKey) .. "|r", rightW - 28, 14, y)
-    y = y - h - 6
+    y = y - h - 3
+    if activeBuild.srcKey then
+        _, h = AddText(rightPanel, "GameFontDisableSmall", L(activeBuild.srcKey), rightW - 28, 14, y)
+        y = y - h - 4
+    end
 
     -- Итоги по веткам + где сейчас игрок
     local t = activeBuild.totals
