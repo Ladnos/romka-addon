@@ -2,8 +2,9 @@
 ## Title: Warrior Guide |cffc79c6e(Journal Edition)|r
 ## Notes: Visual Warrior leveling, talent trees, routes and dungeon loot guide in Dungeon Journal style.
 ## Author: Romyl
-## Version: 2.0.1
+## Version: 2.1.0
 ## SavedVariables: WarriorGuideDB
+## IconTexture: Interface\Icons\Ability_Warrior_SavageBlow
 
 Locales.lua
 Data.lua
